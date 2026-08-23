@@ -93,6 +93,110 @@ app.post('/api/auth/login', (req, res) => {
   });
 });
 
+app.get('/api/vehicles/search', authenticateToken, (req, res) => {
+  const { make, model, category, minPrice, maxPrice } = req.query;
+
+  let sql = 'SELECT * FROM vehicles WHERE 1=1';
+  const params = [];
+
+  if (make) {
+    sql += ' AND LOWER(make) LIKE ?';
+    params.push(`%${make.toLowerCase()}%`);
+  }
+
+  if (model) {
+    sql += ' AND LOWER(model) LIKE ?';
+    params.push(`%${model.toLowerCase()}%`);
+  }
+
+  if (category) {
+    sql += ' AND LOWER(category) = ?';
+    params.push(category.toLowerCase());
+  }
+
+  if (minPrice) {
+    sql += ' AND price >= ?';
+    params.push(Number(minPrice));
+  }
+
+  if (maxPrice) {
+    sql += ' AND price <= ?';
+    params.push(Number(maxPrice));
+  }
+
+  sql += ' ORDER BY id DESC';
+
+  const vehicles = db.prepare(sql).all(...params);
+  res.json(vehicles);
+});
+
+app.get('/api/vehicles', authenticateToken, (req, res) => {
+  const vehicles = db.prepare('SELECT * FROM vehicles ORDER BY id DESC').all();
+  res.json(vehicles);
+});
+
+app.post('/api/vehicles', authenticateToken, (req, res) => {
+  const { make, model, category, price, quantity } = req.body;
+
+  if (!make || !model || !category || price === undefined || quantity === undefined) {
+    return res.status(400).json({ message: 'All vehicle fields are required' });
+  }
+
+  if (Number(price) < 0 || Number(quantity) < 0) {
+    return res.status(400).json({ message: 'Price and quantity must be non-negative' });
+  }
+
+  const insert = db.prepare('INSERT INTO vehicles (make, model, category, price, quantity) VALUES (?, ?, ?, ?, ?)');
+  const result = insert.run(make, model, category, Number(price), Number(quantity));
+
+  res.status(201).json({
+    id: Number(result.lastInsertRowid),
+    make,
+    model,
+    category,
+    price: Number(price),
+    quantity: Number(quantity)
+  });
+});
+
+app.put('/api/vehicles/:id', authenticateToken, (req, res) => {
+  const { id } = req.params;
+  const { make, model, category, price, quantity } = req.body;
+
+  const vehicle = db.prepare('SELECT * FROM vehicles WHERE id = ?').get(id);
+  if (!vehicle) {
+    return res.status(404).json({ message: 'Vehicle not found' });
+  }
+
+  if (!make || !model || !category || price === undefined || quantity === undefined) {
+    return res.status(400).json({ message: 'All vehicle fields are required' });
+  }
+
+  const update = db.prepare('UPDATE vehicles SET make = ?, model = ?, category = ?, price = ?, quantity = ? WHERE id = ?');
+  update.run(make, model, category, Number(price), Number(quantity), id);
+
+  res.json({
+    id: Number(id),
+    make,
+    model,
+    category,
+    price: Number(price),
+    quantity: Number(quantity)
+  });
+});
+
+app.delete('/api/vehicles/:id', authenticateToken, requireAdmin, (req, res) => {
+  const { id } = req.params;
+
+  const vehicle = db.prepare('SELECT * FROM vehicles WHERE id = ?').get(id);
+  if (!vehicle) {
+    return res.status(404).json({ message: 'Vehicle not found' });
+  }
+
+  db.prepare('DELETE FROM vehicles WHERE id = ?').run(id);
+  res.json({ message: 'Vehicle deleted successfully' });
+});
+
 if (process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
