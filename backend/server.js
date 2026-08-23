@@ -197,6 +197,44 @@ app.delete('/api/vehicles/:id', authenticateToken, requireAdmin, (req, res) => {
   res.json({ message: 'Vehicle deleted successfully' });
 });
 
+app.post('/api/vehicles/:id/purchase', authenticateToken, (req, res) => {
+  const { id } = req.params;
+
+  const vehicle = db.prepare('SELECT * FROM vehicles WHERE id = ?').get(id);
+  if (!vehicle) {
+    return res.status(404).json({ message: 'Vehicle not found' });
+  }
+
+  if (vehicle.quantity <= 0) {
+    return res.status(400).json({ message: 'Vehicle is out of stock' });
+  }
+
+  db.prepare('UPDATE vehicles SET quantity = quantity - 1 WHERE id = ?').run(id);
+  const updatedVehicle = db.prepare('SELECT * FROM vehicles WHERE id = ?').get(id);
+
+  res.json(updatedVehicle);
+});
+
+app.post('/api/vehicles/:id/restock', authenticateToken, requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const { quantity } = req.body;
+
+  const restockQty = Number(quantity);
+  if (!quantity || isNaN(restockQty) || restockQty <= 0) {
+    return res.status(400).json({ message: 'Valid positive restock quantity is required' });
+  }
+
+  const vehicle = db.prepare('SELECT * FROM vehicles WHERE id = ?').get(id);
+  if (!vehicle) {
+    return res.status(404).json({ message: 'Vehicle not found' });
+  }
+
+  db.prepare('UPDATE vehicles SET quantity = quantity + ? WHERE id = ?').run(restockQty, id);
+  const updatedVehicle = db.prepare('SELECT * FROM vehicles WHERE id = ?').get(id);
+
+  res.json(updatedVehicle);
+});
+
 if (process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
