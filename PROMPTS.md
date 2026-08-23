@@ -2,16 +2,9 @@
 
 This document contains the unedited user prompts and instructions provided to the AI assistant during the development of the Car Dealership Inventory System.
 
----
+
 
 ### Prompt 1
-```text
-this folder make it a repo
-```
-
----
-
-### Prompt 2
 ```text
 TDD Kata: Car Dealership Inventory System 
 
@@ -92,41 +85,19 @@ Screenshots of your final application in action.
 The mandatory "My AI Usage" section. 
 A test report showing the results of your test suite. 
 A root PROMPTS.md containing your raw, unedited AI chat logs or public chat links (no AI-generated summaries). 
-(Optional - Brownie Points) A link to the deployed, live application on a platform like Vercel, Netlify, Heroku, or AWS.   
 
 create this project with simple and basic structure and codes at begineer level
-not too many files-define functionalities in documentation and plan implementation steps
-for each step completion of generation ->stop and ask to review and push into github with a commit message
-humanised code no comments short simple begineering codes with basic syntaxes only->do not use existing repo codes create ur own.
+in files-define functionalities in documentation and plan implementation steps
+for each step completion of generation
+short simple begineering codes with basic syntaxes only->do not use existing repo codes create ur own.
 make sure documentation has clear explanation of project(aim,existing,idea,tech stack,project architecture,implemntation file details,execution flow)
 test report should be simple->donot complicate the test suite usage keep it very basic
-no need to create a deployed website
 ```
 
 ---
 
-### Prompt 3
+### Prompt 2
 ```text
 next
 ```
 
----
-
-### Prompt 4
-```text
-ok next
-```
-
----
-
-### Prompt 5
-```text
-next
-```
-
----
-
-### Prompt 6
-```text
-next
-```

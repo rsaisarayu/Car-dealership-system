@@ -94,7 +94,47 @@ The aim of this project is to build a reliable, beginner-accessible, and full-fe
 
 ---
 
-## 4. Implementation File Details
+## 4. Application UI & Visual Walkthrough
+
+### 1. Authentication View
+```text
++-------------------------------------------------------------+
+|                      Apex Motors                            |
+|             [ Shield Icon ] Welcome Back                    |
+|                                                             |
+|   Username: [ alex_driver                     ]             |
+|   Password: [ ******************              ]             |
+|   [x] Admin Privileges (Allows inventory management)        |
+|                                                             |
+|   [                 Sign In / Register                ]     |
+|   Already have an account? Sign In here                     |
++-------------------------------------------------------------+
+```
+
+### 2. Vehicle Inventory Dashboard (User & Admin Views)
+```text
++-----------------------------------------------------------------------------------------+
+| [Car] Apex Motors       (Dealership Inventory)          [User: admin_boss | ADMIN] [Out]|
++-----------------------------------------------------------------------------------------+
+| Vehicle Inventory (6 models)           [ Refresh ] [ Seed Sample Data ] [ + Add Vehicle]|
++-----------------------------------------------------------------------------------------+
+| Search & Filter:                                                                        |
+| Make: [ Toyota ] Model: [ Camry ] Category: [ Sedan v ] Min $: [ 20000 ] Max $: [40000] |
+|                                              [ Search (Icon) ] [ Clear ]                |
++-----------------------------------------------------------------------------------------+
+|  +---------------------------+  +---------------------------+  +----------------------+ |
+|  | [SEDAN]        [8 in stock|  | [SUV]          [6 in stock|  | [TRUCK] [Out of Stock| |
+|  | Honda Civic               |  | Toyota RAV4 Hybrid        |  | Chevrolet Silverado  | |
+|  | $23,950 MSRP              |  | $31,725 MSRP              |  | $36,800 MSRP         | |
+|  | [ Purchase Vehicle      ] |  | [ Purchase Vehicle      ] |  | [ Out of Stock (x) ] | |
+|  | [Restock]  [Edit] [Delete]|  | [Restock]  [Edit] [Delete]|  | [Restock][Edit][Del] | |
+|  +---------------------------+  +---------------------------+  +----------------------+ |
++-----------------------------------------------------------------------------------------+
+```
+
+---
+
+## 5. Implementation File Details
 
 ```
 Car dealership system/
@@ -124,7 +164,7 @@ Car dealership system/
 
 ---
 
-## 5. Local Setup & Run Guide
+## 6. Local Setup & Run Guide
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (version 18+ or 20+ / 22+ / 24+)
@@ -165,7 +205,7 @@ Open your browser at **`http://localhost:5173`** to interact with the applicatio
 
 ---
 
-## 6. Test-Driven Development (TDD) & Test Report
+## 7. Test-Driven Development (TDD) & Test Report
 
 The backend was developed using strict **Red-Green-Refactor** cycles:
 1. **Red**: Wrote automated unit and integration tests for every endpoint before writing route handlers.
@@ -210,7 +250,7 @@ Duration: ~3.2s
 
 ---
 
-## 7. My AI Usage
+## 8. My AI Usage
 
 ### 1. Which AI Tools Were Used
 - **Google Gemini (via Antigravity AI)**: Used as the primary AI pair-programming assistant for architecture planning, test suite formulation, step-by-step TDD verification, and code scaffolding.
@@ -226,7 +266,7 @@ Using an AI pair programmer significantly streamlined the Red-Green-Refactor dev
 
 ---
 
-## 8. API Reference Summary
+## 9. API Reference Summary
 
 ### Authentication (`/api/auth`)
 - `POST /api/auth/register`: Create a new user (`username`, `password`, optional `role: "admin"`).
